@@ -23,7 +23,7 @@ if (CUDA_FOUND)
     CUDA_NVCC_FLAGS
     ${CUDA_NVCC_FLAGS};
     -O3
-    # -gencode arch=compute_30,code=sm_30
+    -gencode arch=compute_30,code=sm_30
     -gencode arch=compute_35,code=sm_35
     -gencode arch=compute_50,code=[sm_50,compute_50]
     -gencode arch=compute_52,code=[sm_52,compute_52]
@@ -65,6 +65,7 @@ add_definitions(-DOPENCV)
 add_definitions(-O4 -g)
 
 catkin_package(
+  INCLUDE_DIRS
   INCLUDE_DIRS
     include
   LIBRARIES
@@ -116,7 +117,6 @@ set(DARKNET_CORE_FILES
     ${DARKNET_PATH}/src/gru_layer.c               ${DARKNET_PATH}/src/utils.c
     ${DARKNET_PATH}/src/upsample_layer.c          # ${DARKNET_PATH}/src/logistic_layer.c
     # ${DARKNET_PATH}/src/l2norm_layer.c          ${DARKNET_PATH}/src/yolo_layer.c
-    ${DARKNET_PATH}/src/representation_layer.c
 
     ${DARKNET_PATH}/src/art.c                     # ${DARKNET_PATH}/src/lsd.c
     # ${DARKNET_PATH}/src/attention.c               ${DARKNET_PATH}/src/nightmare.c
@@ -227,30 +227,6 @@ install(DIRECTORY config launch yolo_network_config
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 
-# Download yolov2-tiny.weights
-set(PATH "${CMAKE_CURRENT_SOURCE_DIR}/yolo_network_config/weights")
-set(FILE "${PATH}/yolov2-tiny.weights")
-message(STATUS "Checking and downloading yolov2-tiny.weights if needed ...")
-if (NOT EXISTS "${FILE}")
-  message(STATUS "... file does not exist. Downloading now ...")
-  execute_process(COMMAND wget -q https://github.com/leggedrobotics/darknet_ros/releases/download/1.1.4/yolov2-tiny.weights -P ${PATH})
-endif()
-
-# Download yolov3.weights
-set(FILE "${PATH}/yolov3.weights")
-message(STATUS "Checking and downloading yolov3.weights if needed ...")
-if (NOT EXISTS "${FILE}")
-  message(STATUS "... file does not exist. Downloading now ...")
-  execute_process(COMMAND wget -q https://github.com/leggedrobotics/darknet_ros/releases/download/1.1.4/yolov3.weights -P ${PATH})
-endif()
-
-# Download yolov4.weights
-set(FILE "${PATH}/yolov4.weights")
-message(STATUS "Checking and downloading yolov4.weights if needed ...")
-if (NOT EXISTS "${FILE}")
-  message(STATUS "... file does not exist. Downloading now ...")
-  execute_process(COMMAND wget -q https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.weights -P ${PATH})
-endif()
 
 #############
 ## Testing ##
